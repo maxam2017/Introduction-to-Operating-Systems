@@ -8,7 +8,7 @@ NCTU / 作業系統概論 / 張立平
 
 ### hw2
 * `ipcs -M` show shared memory size [shmmax]
-* enlarge shared memory
+* segment fault ==> enlarge shared memory
   * edit `/etc/sysctl.conf`
   * setting `shmmax` twice larger than before
     ```
