@@ -7,7 +7,7 @@ NCTU / 作業系統概論 / 張立平
 * the ppid of grandchild process is 1 (init) [adopted]
 
 ### hw2
-* `ipcs -M` show shared memory size [shmmax]
+* `ipcs -M` show shared memory size [shmmax] <byte>
 * segment fault ==> enlarge shared memory
   * edit `/etc/sysctl.conf`
   * setting `shmmax` twice larger than before
