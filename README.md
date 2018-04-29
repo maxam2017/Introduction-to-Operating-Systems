@@ -20,3 +20,11 @@ NCTU / 作業系統概論 / 張立平
     ```
 * `ipcs -m` show the info of processes which take up shared memory
 * `ipcrm -m <PID>` clear the shared memory taken up by this process
+
+### hw3
+* compile
+  * -pthead
+  * -g : for gdb <multi-thread programming is difficult to debug>
+* not fit requirement
+  * using T<sub>0</sub> to fulfill pthread_join
+  * this code using main function to recycle last 8 threads
