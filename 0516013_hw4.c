@@ -8,14 +8,14 @@
 struct timeval s,e;
 
 int *A,*B; //array
-sem_t work;
-sem_t non_empty,mutex,mutex2,done; //semaphore
-int count=0;
+sem_t add,work,non_empty,mutex,mutex2,done; //semaphore
+int d_tp = 0;
+int count = 0;
 
 typedef struct arg{
-    int t;
-    int p;
-    int r;
+    int t; // level of sorting (0~3)
+    int p; // sorting front
+    int r; // sorting back
 } ARG;
 
 ARG para[8];
@@ -82,9 +82,10 @@ void get_range(ARG* args){
 }
 
 /************* thread ***********/
-
+int k = 0;
 void* thread_func(void* arg){
     ARG* args = (ARG*)arg;
+    sem_wait(&add);
     while(1){
       sem_wait(&work);  // wait for all thread or waiting after the work is done
       get_range(args);
@@ -124,14 +125,17 @@ int main(int argc, char **argv){
     //initial semaphore
     sem_init(&work,0,0);
     sem_init(&non_empty,0,0);
+    sem_init(&add,0,0);
     sem_init(&mutex,0,1);
     sem_init(&mutex2,0,1);
     sem_init(&done,0,0);
-
+    //initial 8 threads
     for(int i=0;i<8;i++){
+        pthread_create(&t[i],NULL,thread_func,(void*)&para[i]);
+    }
+    for(int i=0;i<8;i++){
+      sem_post(&add); // add one dimesion of thread pool
       count = 0;
-      //add a thread
-      pthread_create(&t[i],NULL,thread_func,(void*)&para[i]);
       gettimeofday(&s, 0);
       //push first job to trigger sorting
       push_range(0,n-1,0);
@@ -140,7 +144,7 @@ int main(int argc, char **argv){
       int sec = e.tv_sec - s.tv_sec;
       int usec = e.tv_usec - s.tv_usec; 
       printf("Execution time of %d thread sorting : %12f ms\n",i+1,sec*1000+(usec/1000.0));
-      //print for test
+      //print result
       char fn[256]="output_*.txt";
       fn[7]=i+1+'0';
       FILE *o = fopen(fn,"w");
@@ -152,7 +156,7 @@ int main(int argc, char **argv){
       //restore array
       for(int i=0;i<n;i++){
         A[i]=B[i];
-      } 
+      }
     }
     return 0;
 }
