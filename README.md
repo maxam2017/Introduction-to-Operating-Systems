@@ -28,3 +28,12 @@ NCTU / 作業系統概論 / 張立平
 * not fit requirement
   * using T<sub>0</sub> to fulfill pthread_join
   * this code using main function to recycle last 8 threads
+
+### hw4
+* using a semaphore[add] to restrict the dimension of thread pool
+  * this semaphore post once when the dimension of thread pool increment
+  * capacity = semaphore value
+* using a semaphore[work] to wait sorting
+  * post this semaphore when a task push into job list
+* using a semaphore[done] to wait last 8 threads(bubble sort)
+  * wait at main function (may not fulfill requirement)
