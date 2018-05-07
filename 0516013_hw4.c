@@ -9,7 +9,6 @@ struct timeval s,e;
 
 int *A,*B; //array
 sem_t add,work,non_empty,mutex,mutex2,done; //semaphore
-int d_tp = 0;
 int count = 0;
 
 typedef struct arg{
@@ -82,7 +81,7 @@ void get_range(ARG* args){
 }
 
 /************* thread ***********/
-int k = 0;
+
 void* thread_func(void* arg){
     ARG* args = (ARG*)arg;
     sem_wait(&add);
