@@ -37,3 +37,10 @@ NCTU / 作業系統概論 / 張立平
   * post this semaphore when a task push into job list
 * using a semaphore[done] to wait last 8 threads(bubble sort)
   * wait at main function (may not fulfill requirement)
+  
+### hw5
+* page replacement
+  > use <map> to implement hash [reference string to frame]
+  * FIFO
+  * LRU (least recently used)
+    * using double linked list to record LRU memory
