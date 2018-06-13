@@ -44,3 +44,8 @@ NCTU / 作業系統概論 / 張立平
   * FIFO
   * LRU (least recently used)
     * using double linked list to record LRU memory
+
+### hw6
+* <getopt.h> for parsing argument more easily.
+* <dirent.h> use to open directory recursively.
+* <sys/stat.h> get the metadata of file/directory.
