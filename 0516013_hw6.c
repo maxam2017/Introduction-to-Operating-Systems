@@ -32,11 +32,11 @@ void parse_arg(int argc, char **argv){
                 break;
             case 's':
                 y = 1;
-                size_max = atof(optarg)*1024;
+                size_min = atof(optarg)*1024;
                 break;
             case 't':
                 z = 1;
-                size_min = atof(optarg)*1024;
+                size_max = atof(optarg)*1024;
                 break;
         }
     }
@@ -57,25 +57,27 @@ void recursive(char* name){
         if(w+x+y+z == 0){
           printf("%s %llu %lf MB\n",s,buf.st_ino,buf.st_size/(double)1024);
         }
-        if(strcmp(ptr->d_name,".") == 0 || strcmp(ptr->d_name,"..") == 0)
-          continue;
-        if((w==1 && (long long int)buf.st_ino == inode) || (x==1 && strcmp(filename,ptr->d_name)==0) || (y==1 && buf.st_size <= size_min) || (z == 1 && buf.st_size >= size_max)){
-          printf("%s %llu %lf MB\n",s,buf.st_ino,buf.st_size/(double)1024);
+        if(!(strcmp(ptr->d_name,".") == 0 || strcmp(ptr->d_name,"..") == 0)){
+          if(((w==1 && buf.st_ino == inode) || w == 0) && ((x==1 && strcmp(filename,ptr->d_name)==0)|| x==0) &&((y==1 && buf.st_size >= size_min)|| y==0) &&( (z == 1 && buf.st_size <= size_max)|| z==0)){
+            printf("%s %llu %lf MB\n",s,buf.st_ino,buf.st_size/(double)1024);
+          }
+          recursive(s);
         }
-        recursive(s);
       }
       else{
         //regular file
         sprintf(s,"%s/%s",name,ptr->d_name);
         stat(s,&buf);
-        if((w+x+y+z == 0)||(w==1 && (long long int)buf.st_ino == inode) || (x==1 && strcmp(filename,ptr->d_name)==0) || (y==1 && buf.st_size <= size_min) || (z == 1 && buf.st_size >= size_max)){
+        if((w+x+y+z == 0)||(((w==1 && buf.st_ino == inode) || w == 0) && ((x==1 && strcmp(filename,ptr->d_name)==0)|| x==0) &&((y==1 && buf.st_size >= size_min)|| y==0) &&( (z == 1 && buf.st_size <= size_max)|| z==0))){
           printf("%s %llu %lf MB\n",s,buf.st_ino,buf.st_size/(double)1024);
         }
       }
     }
+    closedir(d);
 }
 
 int main(int argc, char **argv){
     parse_arg(argc,argv);
     recursive(pathname);
+    return 0;
 }
